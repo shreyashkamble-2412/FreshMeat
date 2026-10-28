@@ -1,0 +1,96 @@
+
+{% extends "base.html" %}
+
+{% block title %}{{ active_page }} | Meat Shop{% endblock %}
+
+{% block content %}
+<h1>{{ active_page }}</h1>
+<p class="muted">Welcome back! Here is your shop overview.</p>
+
+{% if active_page == 'Dashboard' %}
+
+<div class="cards">
+    <div class="card">
+        <div class="stat-label">🛒 Total Orders</div>
+        <div class="stat-value">{{ stats.orders }}</div>
+    </div>
+    <div class="card">
+        <div class="stat-label">💰 Total Sales</div>
+        <div class="stat-value">₹{{ "%.2f"|format(stats.sales) }}</div>
+    </div>
+    <div class="card">
+        <div class="stat-label">📦 Current Stock</div>
+        <div class="stat-value">{{ stats.stock }} kg</div>
+    </div>
+    <div class="card">
+        <div class="stat-label">👥 Customers</div>
+        <div class="stat-value">{{ stats.customers }}</div>
+    </div>
+</div>
+
+<div class="two-col">
+    <div class="card">
+        <div class="section-title">📋 Recent Orders</div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Product</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for order in recent_orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.customer }}</td>
+                        <td>{{ order.product }}</td>
+                        <td>₹{{ "%.2f"|format(order.amount) }}</td>
+                        <td><span class="status">{{ order.status }}</span></td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5">No orders available yet.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="section-title">⚡ Quick Actions</div>
+        <a class="quick-link" href="/products">＋ Add Product</a>
+        <a class="quick-link" href="/customers">＋ Add Customer</a>
+        <a class="quick-link" href="/orders">＋ Create Order</a>
+        <a class="quick-link" href="/reports">📊 View Reports</a>
+    </div>
+</div>
+
+{% else %}
+
+<div class="card" style="margin-top:24px">
+    <div class="section-title">{{ active_page }} Management</div>
+    <p class="muted">
+        This section is ready for the next development step.
+    </p>
+    {% if active_page == 'Products' %}
+        <p>Next: Add product name, cut type, price per kg and stock.</p>
+    {% elif active_page == 'Customers' %}
+        <p>Next: Add customer name, phone number and address.</p>
+    {% elif active_page == 'Orders' %}
+        <p>Next: Select customer, product, weight and delivery slot.</p>
+    {% elif active_page == 'Order History' %}
+        <p>Next: Show saved orders, status and payment history.</p>
+    {% elif active_page == 'Reports' %}
+        <p>Next: Calculate sales and order reports from MySQL.</p>
+    {% else %}
+        <p>Next: Implement this section with proper access controls.</p>
+    {% endif %}
+</div>
+
+{% endif %}
+{% endblock %}

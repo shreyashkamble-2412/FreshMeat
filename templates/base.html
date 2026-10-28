@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Meat Shop Management{% endblock %}</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #192b49;
+        }
+        .sidebar {
+            position: fixed;
+            inset: 0 auto 0 0;
+            width: 245px;
+            background: #172438;
+            color: white;
+            padding: 24px 14px;
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+        }
+        .brand {
+            font-size: 20px;
+            font-weight: bold;
+            padding: 8px 12px 28px;
+            line-height: 1.4;
+        }
+        .nav-link {
+            display: block;
+            color: #dce5f3;
+            text-decoration: none;
+            padding: 14px 15px;
+            margin: 3px 0;
+            border-radius: 9px;
+            font-size: 15px;
+        }
+        .nav-link:hover, .nav-link.active {
+            background: #347cf6;
+            color: white;
+        }
+        .admin {
+            margin-top: auto;
+            padding: 20px 12px 5px;
+            border-top: 1px solid #344257;
+            line-height: 1.6;
+        }
+        .main {
+            margin-left: 245px;
+            min-height: 100vh;
+        }
+        .topbar {
+            height: 68px;
+            background: white;
+            border-bottom: 1px solid #e8edf4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 28px;
+        }
+        .content { padding: 28px; }
+        h1 { margin: 0 0 9px; font-size: 29px; }
+        .muted { color: #748198; }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin: 25px 0;
+        }
+        .card {
+            background: white;
+            border: 1px solid #e5eaf2;
+            border-radius: 13px;
+            padding: 21px;
+            box-shadow: 0 3px 12px #17243808;
+        }
+        .stat-label { color: #64738b; font-size: 14px; }
+        .stat-value { font-size: 28px; font-weight: bold; margin-top: 12px; }
+        .two-col {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr);
+            gap: 18px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 18px;
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th, td {
+            padding: 14px 10px;
+            text-align: left;
+            border-bottom: 1px solid #edf0f5;
+            font-size: 13px;
+        }
+        th { color: #68768d; background: #f8fafd; }
+        .status {
+            display: inline-block;
+            padding: 6px 9px;
+            border-radius: 20px;
+            background: #e3f7ed;
+            color: #138452;
+            font-size: 12px;
+        }
+        .quick-link {
+            display: block;
+            background: #f3f7ff;
+            color: #2866d9;
+            padding: 14px;
+            margin-top: 10px;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+        .quick-link:hover { background: #e5eeff; }
+        .menu-button {
+            display: none;
+            border: 0;
+            background: none;
+            font-size: 24px;
+        }
+        @media (max-width: 1000px) {
+            .cards { grid-template-columns: repeat(2, 1fr); }
+            .two-col { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 700px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main { margin-left: 0; }
+            .menu-button { display: block; }
+            .content { padding: 18px 12px; }
+            .topbar { padding: 0 15px; }
+            .cards { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .card { padding: 14px; }
+            .stat-value { font-size: 22px; }
+            .table-wrap { overflow-x: auto; }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="brand">🥩 Meat Shop<br>Management</div>
+
+        {% set menu = [
+            ('Dashboard', '/', '🏠'),
+            ('Products', '/products', '📦'),
+            ('Customers', '/customers', '👥'),
+            ('Orders', '/orders', '🛒'),
+            ('Order History', '/history', '🕘'),
+            ('Reports', '/reports', '📊'),
+            ('Users', '/users', '👤'),
+            ('Settings', '/settings', '⚙️')
+        ] %}
+
+        {% for label, url, emoji in menu %}
+            <a class="nav-link {% if active_page == label %}active{% endif %}"
+               href="{{ url }}">{{ emoji }} &nbsp; {{ label }}</a>
+        {% endfor %}
+
+        <div class="admin">👤 Admin<br><small>Shop Administrator</small></div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <button class="menu-button"
+                    onclick="document.getElementById('sidebar').classList.toggle('open')"
+                    aria-label="Toggle navigation">☰</button>
+            <span>Meat Shop Management</span>
+            <span>Welcome, Admin 👋</span>
+        </header>
+
+        <section class="content">
+            {% block content %}{% endblock %}
+        </section>
+    </main>
+</body>
+</html>

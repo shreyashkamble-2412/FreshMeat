@@ -1,0 +1,72 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Products & Stock</h1>
+    <p>Add meat products and manage stock and prices.</p>
+</div>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+      <p>{{ message }}</p>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<div class="card">
+    <h2>Add New Product</h2>
+
+    <form method="POST">
+        <label>Product Name</label>
+        <input type="text" name="name"
+               placeholder="Chicken, Mutton..." required>
+
+        <label>Cut Type</label>
+        <input type="text" name="cut_type"
+               placeholder="Boneless, Curry Cut...">
+
+        <label>Price per KG (₹)</label>
+        <input type="number" name="price" min="0"
+               step="0.01" required>
+
+        <label>Stock (KG)</label>
+        <input type="number" name="stock" min="0"
+               step="0.001" required>
+
+        <button type="submit">Add Product</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Available Products</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Cut Type</th>
+                <th>Price / KG</th>
+                <th>Stock (KG)</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.cut_type or "-" }}</td>
+                <td>₹{{ "%.2f"|format(product.price_per_kg) }}</td>
+                <td>{{ product.stock_kg }}</td>
+                <td>{{ product.status }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">No products added yet.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
